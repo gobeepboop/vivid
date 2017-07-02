@@ -23,7 +23,7 @@ class User extends Model
 ```
 ## UUID4
 
-```
+```php
 class User extends Model
 {
     protected $optimizedUuid = false;
