@@ -1,0 +1,22 @@
+preset: laravel
+
+risky: false
+
+enabled:
+  - align_equals
+  - concat_with_spaces
+  - phpdoc_align
+
+disabled:
+  - unalign_equals
+  - concat_without_spaces
+
+finder:
+  exclude:
+    - "tests"
+  name:
+    - "*.php"
+  not-contains:
+    - "config"
+  path:
+    - "src"

@@ -1,0 +1,27 @@
+{
+    "name": "beep/vivid",
+    "description": "An expressive set of recipes to extend functionality in Laravel Eloquent.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robbie Garvey",
+            "email": "robbiecgarvey@gmail.com"
+        }
+    ],
+    "require": {
+        "ramsey/uuid": "^3.6",
+        "illuminate/database": "^5.4",
+        "illuminate/queue": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Beep\\Vivid\\": "src/",
+            "Beep\\Vivid\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.2",
+        "illuminate/events": "^5.4"
+    }
+}
