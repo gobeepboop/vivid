@@ -32,6 +32,5 @@ class User extends Model
 
 ## ToDo
 * Cleanup and expand tests both optimized and add non-optimized UUID Model tests.
-* Grammar and expansion of the Schema Blueprint to add a `$table->binary()` column.
 * Properly cast optimized UUIDs.
 * JSON serialization by indicated columns for optimized.

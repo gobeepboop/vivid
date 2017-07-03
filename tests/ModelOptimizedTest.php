@@ -5,7 +5,7 @@ namespace Beep\Vivid\Tests;
 use Beep\Vivid\Database\Eloquent\Model;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Schema\Blueprint;
+use Beep\Vivid\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
 use PHPUnit\Framework\TestCase;
@@ -34,18 +34,29 @@ class ModelTest extends TestCase
         $db->setAsGlobal();
 
         $this->schema()->create('users', function (Blueprint $table): void {
+            $table->randomizes();
             $table->timestamps();
         });
 
-        $this->connection()->statement('ALTER TABLE `users` ADD COLUMN `id` BINARY(16)');
 
         $this->schema()->create('comments', function (Blueprint $table) {
+            $table->randomizes();
+            $table->binary('user_id', 16)->nullable();
             $table->text('content')->nullable();
             $table->timestamps();
         });
+    }
 
-        $this->connection()->statement('ALTER TABLE `comments` ADD COLUMN `id` BINARY(16)');
-        $this->connection()->statement('ALTER TABLE `comments` ADD COLUMN `user_id` BINARY(16)');
+    /**
+     * Tear down the Test.
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        $this->schema()->drop('users');
+        $this->schema()->drop('comments');
+        Eloquent::clearBootedModels();
     }
 
     /**
@@ -69,7 +80,7 @@ class ModelTest extends TestCase
      */
     public function test_model_can_be_found_with_optimized_uuid(): void
     {
-        $user = tap(new User, function ($user) {
+        $user = tap(new User, function (&$user) {
             $user->save();
         });
 
@@ -92,7 +103,6 @@ class ModelTest extends TestCase
         $user->save();
 
         $comment = new Comment;
-
         $user->comments()->save($comment);
 
         $this->assertInstanceOf(Comment::class, $user->comments->where('id', $comment->id)->first());
@@ -107,7 +117,11 @@ class ModelTest extends TestCase
      */
     protected function schema(): Builder
     {
-        return $this->connection()->getSchemaBuilder();
+        return tap($this->connection()->getSchemaBuilder(), function ($builder) {
+            $builder->blueprintResolver(function ($table, $callback) {
+                return new Blueprint($table, $callback);
+            });
+        });
     }
 
     /**
