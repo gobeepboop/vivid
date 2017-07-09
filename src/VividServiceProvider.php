@@ -2,8 +2,8 @@
 
 namespace Beep\Vivid;
 
-use Beep\Vivid\Schema\Blueprint;
-use Illuminate\Database\Schema\Builder;
+use Illuminate\Database\MySqlConnection as IlluminateMySqlConnection;
+use Beep\Vivid\Database\MySqlConnection;
 use Illuminate\Support\ServiceProvider;
 
 class VividServiceProvider extends ServiceProvider
@@ -15,12 +15,7 @@ class VividServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        /** @var Builder $schemaBuilder */
-        $schemaBuilder = $this->app->make(Builder::class);
-        $schemaBuilder->blueprintResolver(function ($table, $closure) {
-            return new Blueprint($table, $closure);
-        });
-
-        $this->app->instance(Builder::class, $schemaBuilder);
+        // MySQL Connection
+        $this->app->bind(IlluminateMySqlConnection::class, MySqlConnection::class);
     }
 }
