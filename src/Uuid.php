@@ -1,6 +1,6 @@
 <?php
 
-namespace Beep\Vivid\Database\Eloquent;
+namespace Beep\Vivid;
 
 use Ramsey\Uuid\Uuid as RamseyUuid;
 

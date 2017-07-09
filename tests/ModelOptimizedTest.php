@@ -2,14 +2,14 @@
 
 namespace Beep\Vivid\Tests;
 
-use Beep\Vivid\Database\Eloquent\Model;
+use Beep\Vivid\Model;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Beep\Vivid\Database\Schema\Blueprint;
+use Beep\Vivid\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Events\Dispatcher;
 use PHPUnit\Framework\TestCase;
-use Beep\Vivid\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Capsule\Manager as DB;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 

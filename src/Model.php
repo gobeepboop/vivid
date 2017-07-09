@@ -1,6 +1,6 @@
 <?php
 
-namespace Beep\Vivid\Database\Eloquent;
+namespace Beep\Vivid;
 
 use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid as RamseyUuid;
@@ -58,5 +58,17 @@ class Model extends \Illuminate\Database\Eloquent\Model
 
             return $attempt;
         })->toArray();
+    }
+
+    /**
+     * Determines if the Model is using a trait.
+     *
+     * @param string $trait
+     *
+     * @return bool
+     */
+    protected function isUsingTrait(string $trait): bool
+    {
+        return in_array($trait, class_uses_recursive(static::class), true) === true;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Beep\Vivid\Database\Schema;
+namespace Beep\Vivid\Schema;
 
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Fluent;
