@@ -2,8 +2,8 @@
 
 namespace Beep\Vivid;
 
-use Illuminate\Database\MySqlConnection as IlluminateMySqlConnection;
 use Beep\Vivid\Database\MySqlConnection;
+use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
 
 class VividServiceProvider extends ServiceProvider
@@ -16,6 +16,8 @@ class VividServiceProvider extends ServiceProvider
     public function register(): void
     {
         // MySQL Connection
-        $this->app->bind(IlluminateMySqlConnection::class, MySqlConnection::class);
+        Connection::resolverFor('mysql', function () {
+            return new MySqlConnection(...func_get_args());
+        });
     }
 }
