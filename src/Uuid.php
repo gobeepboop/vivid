@@ -68,7 +68,7 @@ trait Uuid
      */
     public function getQueueableId()
     {
-        return $this->getOptimizedUuid() ? $this->uuidAsBytes($this->getKey()) : $this->getKey();
+        return $this->getOptimizedUuid() ? RamseyUuid::fromBytes($this->getKey())->toString() : $this->getKey();
     }
 
     /**
