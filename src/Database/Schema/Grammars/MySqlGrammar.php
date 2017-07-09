@@ -12,6 +12,6 @@ class MySqlGrammar extends Base
      */
     public function typeBinary(Fluent $column): string
     {
-        return "binary";
+        return "binary({$column->length})";
     }
 }
