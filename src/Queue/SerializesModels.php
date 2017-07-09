@@ -4,12 +4,12 @@ namespace Beep\Vivid\Queue;
 
 use Beep\Vivid\Model;
 use Ramsey\Uuid\Uuid;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\SerializesModels as Base;
 use Illuminate\Contracts\Database\ModelIdentifier;
 
-trait SerializesUuidModels
+trait SerializesModels
 {
-    use SerializesModels;
+    use Base;
 
     /**
      * Get the restored property value after deserialization.
