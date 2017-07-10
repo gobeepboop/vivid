@@ -7,6 +7,7 @@ use Beep\Vivid\Scout\Engines\AlgoliaEngine;
 use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Scout\EngineManager as ScoutEngineManager;
+use AlgoliaSearch\Client as Algolia;
 
 class VividServiceProvider extends ServiceProvider
 {
@@ -31,7 +32,9 @@ class VividServiceProvider extends ServiceProvider
     public function boot(): void
     {
         resolve(ScoutEngineManager::class)->extend('algolia', function () {
-            return $this->app->make(AlgoliaEngine::class);
+            return new AlgoliaEngine(new Algolia(
+                config('scout.algolia.id'), config('scout.algolia.secret')
+            ));
         });
     }
 }
