@@ -2,6 +2,7 @@
 
 namespace Beep\Vivid;
 
+use Beep\Vivid\Database\Eloquent\Collection;
 use Beep\Vivid\Jobs\MakeSearchable;
 use Laravel\Scout\Searchable as Base;
 
@@ -22,7 +23,7 @@ trait Searchable
             return $models->first()->searchableUsing()->update($models);
         }
 
-        dispatch((new MakeSearchable($models))
+        dispatch((new MakeSearchable(new Collection($models->all())))
             ->onQueue($models->first()->syncWithSearchUsingQueue())
             ->onConnection($models->first()->syncWithSearchUsing()));
     }
