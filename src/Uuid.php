@@ -137,11 +137,11 @@ trait Uuid
      *
      * @return string
      */
-    protected function determineKey(): string
+    protected function determineKey(): ?string
     {
         $key = array_key_exists($this->getKeyName(), $this->attributes) ? $this->attributes[$this->getKeyName()] : null;
 
-        if (! $this->getOptimizedUuid()) {
+        if (! $this->getOptimizedUuid() || $key === null) {
             return $key;
         }
 
