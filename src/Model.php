@@ -23,11 +23,9 @@ class Model extends \Illuminate\Database\Eloquent\Model
     {
         if (in_array($method, ['find', 'findOrFail', 'where', 'whereIn'])) {
             $parameters = Collection::make($parameters)->transform(function ($value) {
-                if (! RamseyUuid::isValid($value) || ! $this->getOptimizedUuid()) {
-                    return $value;
-                }
-
-                return $this->uuidAsBytes($value);
+                return is_array($value) ? collect($value)->transform(function ($item) {
+                    return $this->tryToTransformParameter($item);
+                }) : $this->tryToTransformParameter($value);
             })->toArray();
         }
 
@@ -70,5 +68,21 @@ class Model extends \Illuminate\Database\Eloquent\Model
     protected function isUsingTrait(string $trait): bool
     {
         return in_array($trait, class_uses_recursive(static::class), true) === true;
+    }
+
+    /**
+     * Tries to transform the given parameter or gives back the value.
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    protected function tryToTransformParameter($value)
+    {
+        if (! is_string($value) || ! RamseyUuid::isValid($value) || ! $this->getOptimizedUuid()) {
+            return $value;
+        }
+
+        return $this->uuidAsBytes($value);
     }
 }
