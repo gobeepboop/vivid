@@ -24,14 +24,20 @@ trait SerializesModels
             return $value;
         }
 
-        $model = new $value->class;
+        $model       = new $value->class;
+        $isOptimized = $model instanceof Model && $model->getOptimizedUuid() === true;
+
+        if (is_array($value->id) === true) {
+            $value->id = collect($value->id)->transform(function ($id) use ($isOptimized) {
+                return $isOptimized === true ? Uuid::fromString($id)->getBytes() : $id;
+            })->all();
+        }
 
         return is_array($value->id)
             ? $this->restoreCollection($value)
             : $this->getQueryForModelRestoration($model)
                    ->useWritePdo()->findOrFail(
-                    $model instanceof Model && $model->getOptimizedUuid() === true
-                        ? Uuid::fromString($value->id)->getBytes() : $value->id
+                    $isOptimized === true ? Uuid::fromString($value->id)->getBytes() : $value->id
                 );
     }
 }
