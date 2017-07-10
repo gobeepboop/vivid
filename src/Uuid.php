@@ -58,7 +58,7 @@ trait Uuid
      */
     public function getKey(): ?string
     {
-        return array_key_exists($this->getKeyName(), $this->attributes) ? $this->attributes[$this->getKeyName()] : null;
+        return $this->determineKey();
     }
 
     /**
@@ -105,7 +105,7 @@ trait Uuid
      */
     protected function getKeyForSaveQuery()
     {
-        return array_key_exists($this->getKeyName(), $this->attributes) ? $this->attributes[$this->getKeyName()] : null;
+        return $this->determineKey();
     }
 
     /**
@@ -118,5 +118,29 @@ trait Uuid
     protected function guessIfOptimizedUuid($value): bool
     {
         return is_string($value) === true && strlen($value) === 16;
+    }
+
+    /**
+     * Determines the key through a backtrace.
+     *
+     * @return string
+     */
+    protected function determineKey(): string
+    {
+        $key = array_key_exists($this->getKeyName(), $this->attributes) ? $this->attributes[$this->getKeyName()] : null;
+
+        if (! $this->getOptimizedUuid()) {
+            return $key;
+        }
+
+        $haystack   = collect(['\\Scout\\']);
+
+        $needsUuid  = collect(debug_backtrace())->contains(function ($trace) use ($haystack): bool {
+            return array_has($trace, 'class') === true && $haystack->contains(function (string $needle) use ($trace) {
+                    return str_contains(array_get($trace, 'class'), $needle);
+            });
+        });
+
+        return $needsUuid ? RamseyUuid::fromBytes($key)->toString() : $key;
     }
 }
