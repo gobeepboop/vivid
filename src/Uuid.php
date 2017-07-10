@@ -145,23 +145,19 @@ trait Uuid
             return $key;
         }
 
-        return collect(debug_backtrace())->contains(function (array $trace): bool {
-            return array_has($trace, 'function') === true && str_contains(array_get($trace, 'function'), ['keyBy']);
-        }) ? RamseyUuid::fromBytes($key)->toString() : $key;
+        return $this->optimizableViaBacktrace() ? RamseyUuid::fromBytes($key)->toString() : $key;
     }
 
     /**
      * Determines whether optimizable via backtrace.
      *
-     * @param int $rewindBy
-     *
      * @return bool
      */
-    protected function optimizableViaBacktrace(int $rewindBy = 5): bool
+    protected function optimizableViaBacktrace(): bool
     {
         $haystack   = collect(['\\Scout\\']);
 
-        return collect(debug_backtrace())->take($rewindBy)->contains(function ($trace) use ($haystack): bool {
+        return collect(debug_backtrace())->take(5)->contains(function ($trace) use ($haystack): bool {
             return array_has($trace, 'class') === true && $haystack->contains(function (string $needle) use ($trace) {
                     return str_contains(array_get($trace, 'class'), $needle);
             });
