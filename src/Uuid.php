@@ -17,7 +17,7 @@ trait Uuid
     protected static function bootUuid(): void
     {
         static::creating(function ($model) {
-            $model->setUuidAttribute($model->getKeyName());
+            $model->forUuidAttribute($model->getKeyName());
         });
     }
 
@@ -48,7 +48,7 @@ trait Uuid
      */
     public function setIdAttribute(string $id): void
     {
-        $this->setUuidAttribute('id', $id);
+        $this->forUuidAttribute('id', $id);
     }
 
     /**
@@ -89,7 +89,7 @@ trait Uuid
      * @param string $column
      * @param string $uuid
      */
-    protected function setUuidAttribute(string $column, string $uuid = null): void
+    protected function forUuidAttribute(string $column, string $uuid = null): void
     {
         if (empty($uuid)) {
             $uuid = RamseyUuid::uuid4()->toString();

@@ -152,7 +152,7 @@ class Comment extends Model
 
     public function setUserIdAttribute($value): void
     {
-        $this->setUuidAttribute('user_id', $value);
+        $this->forUuidAttribute('user_id', $value);
     }
 }
 
