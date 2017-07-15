@@ -25,7 +25,7 @@ trait SerializesModels
         }
 
         $model       = new $value->class;
-        $isOptimized = $model instanceof Model && $model->getOptimizedUuid() === true;
+        $isOptimized = $model instanceof Model && $model->usesOptimizedUuid() === true;
 
         if (is_array($value->id) === true) {
             $value->id = collect($value->id)->transform(function ($id) use ($isOptimized) {

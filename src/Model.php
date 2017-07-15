@@ -39,7 +39,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
     {
         $serialized = $this->toArray();
 
-        if (! $this->getOptimizedUuid()) {
+        if (! $this->usesOptimizedUuid()) {
             return $serialized;
         }
 
@@ -79,7 +79,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
      */
     protected function tryToTransformParameter($value)
     {
-        if (! is_string($value) || ! RamseyUuid::isValid($value) || ! $this->getOptimizedUuid()) {
+        if (! is_string($value) || ! RamseyUuid::isValid($value) || ! $this->usesOptimizedUuid()) {
             return $value;
         }
 

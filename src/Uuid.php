@@ -36,7 +36,7 @@ trait Uuid
      *
      * @return bool
      */
-    public function getOptimizedUuid(): bool
+    public function usesOptimizedUuid(): bool
     {
         return $this->optimizedUuid;
     }
@@ -60,7 +60,7 @@ trait Uuid
     {
         $id = $this->{$this->primaryKey};
 
-        return $this->getOptimizedUuid() === true ? RamseyUuid::fromBytes($id)->toString() : $id;
+        return $this->usesOptimizedUuid() === true ? RamseyUuid::fromBytes($id)->toString() : $id;
     }
 
     /**
@@ -80,7 +80,7 @@ trait Uuid
      */
     public function getQueueableId()
     {
-        return $this->getOptimizedUuid() ? RamseyUuid::fromBytes($this->getKey())->toString() : $this->getKey();
+        return $this->usesOptimizedUuid() ? RamseyUuid::fromBytes($this->getKey())->toString() : $this->getKey();
     }
 
     /**
@@ -94,7 +94,7 @@ trait Uuid
         if (empty($uuid)) {
             $uuid = RamseyUuid::uuid4()->toString();
         }
-        $this->attributes[$column] = $this->getOptimizedUuid() && RamseyUuid::isValid($uuid)
+        $this->attributes[$column] = $this->usesOptimizedUuid() && RamseyUuid::isValid($uuid)
             ? RamseyUuid::fromString($uuid)->getBytes() : $uuid;
     }
 
@@ -141,7 +141,7 @@ trait Uuid
     {
         $key = array_key_exists($this->getKeyName(), $this->attributes) ? $this->attributes[$this->getKeyName()] : null;
 
-        if (! $this->getOptimizedUuid() || $key === null) {
+        if (! $this->usesOptimizedUuid() || $key === null) {
             return $key;
         }
 
